@@ -1,5 +1,5 @@
 const TicTacToe = (function(){
-  let currentPlayer = "X";
+  let currentPlayer = {marker:  "X", name: "Player 1"};
   let gameBoard = createGameBoard();
 
   function createGameBoard(){
@@ -25,8 +25,8 @@ const TicTacToe = (function(){
 
   function makeMove(cellIndex){
     if (!gameBoard[cellIndex]) {
-      gameBoard[cellIndex] = currentPlayer;
-       currentPlayer = currentPlayer === "X" ? "O" : "X";
+      gameBoard[cellIndex] = currentPlayer.marker;
+       currentPlayer = currentPlayer.marker === "X" ? {marker: "O", name: "Player 2"} : { marker: "X", name: "Player 1"};
       return true;
     }
     return false;
@@ -42,7 +42,7 @@ const TicTacToe = (function(){
 
   function resetGame(){
     gameBoard = createGameBoard();
-    currentPlayer = "X";
+    currentPlayer = {marker: "X", name: "Player 1"};
   }
 
   return{
@@ -54,17 +54,48 @@ const TicTacToe = (function(){
   };
 })();
 
-TicTacToe.makeMove(0);
-TicTacToe.makeMove(1);
-TicTacToe.makeMove(4);
-TicTacToe.makeMove(2);
-TicTacToe.makeMove(8);
-TicTacToe.makeMove(3);
-TicTacToe.makeMove(4)
-TicTacToe.makeMove(7);
-TicTacToe.makeMove(8);
 
-console.log(TicTacToe.getGameBoard());
-console.log(TicTacToe.checkWinner());
-console.log(TicTacToe.getCurrentPlayer());
-TicTacToe.resetGame();
+
+document.addEventListener("DOMContentLoaded", function(){
+  const cells = document.querySelectorAll(".cell");
+  const resetButton = document.getElementById("reset-button");
+  const messageElement = document.getElementById("message");
+
+  cells.forEach(cell => {
+    cell.addEventListener("click", handleCellClick);
+  });
+
+  resetButton.addEventListener("click", resetGame);
+
+  function handleCellClick(event){
+    const cellIndex = parseInt(event.target.id.split("-")[1]);
+    if (TicTacToe.makeMove(cellIndex)){
+      updateBoard();
+      const winner = TicTacToe.checkWinner();
+      if (winner){
+        messageElement.textContent = `${winner} wins!`;
+        cells.forEach(cell => {
+          cell.removeEventListener("click", handleCellClick);
+        });
+      }
+    }
+
+  }
+
+  function resetGame(){
+    TicTacToe.resetGame();
+    updateBoard();
+    messageElement.textContent = "";
+    cells.forEach(cell => {
+      cell.addEventListener("click", handleCellClick);
+    });
+    
+  }
+
+  function updateBoard(){
+    const gameBoard = TicTacToe.getGameBoard();
+    cells.forEach((cell, index) => {
+      cell.textContent = gameBoard[index];
+    })
+  }
+})

@@ -1,0 +1,49 @@
+body{
+  margin: 0px;
+  padding: 0px;
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+
+h2{
+  text-align: center;
+}
+
+.board{
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 2px;
+  justify-content: center;
+}
+
+.cell{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: lightgray;
+  border: 1px solid gray;
+  font-size: 2em;
+  cursor: pointer;
+}
+
+.cell:hover{
+  background-color: lightblue;
+}
+
+.reset-button{
+  margin: 10px auto;
+  background-color: rgb(0, 157, 255);
+  border:none;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  display: block;
+}
+
+.message{
+  text-align: center;
+  font-size: 1.2em;;
+  margin-top: 20px;
+  color: red;
+}
